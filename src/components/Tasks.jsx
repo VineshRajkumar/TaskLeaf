@@ -13,8 +13,8 @@ const Tasks = ({ taskButton }) => {
     useEffect(() => {
         let todoString = localStorage.getItem("todos")
         if(todoString){
-            let todos = JSON.parse(localStorage.getItem("todos"))
-            settodos(todos)
+            let todoos = JSON.parse(todoString)
+            settodos(todoos)
         }
         
     }, [])
@@ -51,7 +51,7 @@ const Tasks = ({ taskButton }) => {
             playsound.current.src = newTodos[index].isCompleted ? 'Audio1.mp3' : 'whoosh.mp3';
             playsound.current.play();
         }
-        saveToLS()
+        localStorage.setItem("todos",JSON.stringify(newTodos))
     };
 
     const handleChange = (e) => {
@@ -59,16 +59,18 @@ const Tasks = ({ taskButton }) => {
     };
 
     const handleClickAdd = () => {
-        settodos([...todos, { todo, isCompleted: false }]); // Storing todo in todos array
+        const newtodoss = [...todos, { todo, isCompleted: false }]
+        settodos(newtodoss); // Storing todo in todos array
+        localStorage.setItem("todos",JSON.stringify(newtodoss))
         settodo(""); // Resetting value of todo so that next todo can be entered
-        saveToLS()
+        
     };
     const handleClickEdit = (index) => {
         setEditIndex(index); // Set the index of the item being edited - sets the item to edit in edit mode
         const newTodos = todos.filter((item, idx) => idx !== index) //deleting clikced item
         settodos(newTodos);//dleteing clicked item
         settodo(todos[index].todo); //the particluar index is taken and is put to todo which is "" so it gets the value of that index
-        saveToLS()
+        localStorage.setItem("todos",JSON.stringify(newTodos))
     };
 
     //If todos is ['Task1', 'Task2', 'Task3'] and you want to delete the item at index 1 ('Task2'):
@@ -81,7 +83,7 @@ const Tasks = ({ taskButton }) => {
     const handleClickDelete = (index) => { //todos.filter creates new array //index - it is the index of todos which we want to delete
         const newTodos = todos.filter((item, idx) => idx !== index) //item -current item, idx-index of filter array
         settodos(newTodos); // If idx is not equal to index, the condition returns true, so the item is included in the new array (newTodos). If idx is equal to index, the condition returns false, so the item is excluded from newTodos.
-        saveToLS()
+        localStorage.setItem("todos",JSON.stringify(newTodos))
     };
 
     const currentdatetime = moment();
